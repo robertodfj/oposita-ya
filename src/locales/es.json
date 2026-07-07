@@ -1,4 +1,77 @@
 {
-  "welcome": "Bienvenido a Oposita Ya",
-  "description": "Tu plataforma para preparar oposiciones."
+  "landing": {
+    "brand": "Oposita Ya",
+    "nav": {
+      "features": "Características",
+      "community": "Comunidad",
+      "login": "Iniciar sesión",
+      "cta": "Empieza gratis"
+    },
+    "hero": {
+      "badge": "La red social para opositores",
+      "title": "Aprueba ya tus oposiciones",
+      "titleAccent": "estudiando gratis a diario",
+      "subtitle": "Miles de test y temario actualizado, además de la red social para opositores tendencia!",
+      "cta": "Empieza ya gratis!",
+      "note": "Sin tarjeta. Sin compromiso. Empieza en menos de 30 segundos.",
+      "rating": "4,9 de valoración media",
+      "card": {
+        "label": "Pregunta 12 de 30",
+        "question": "¿Cuál es el plazo general para interponer un recurso de alzada?",
+        "option1": "Quince días",
+        "option2": "Un mes",
+        "option3": "Tres meses",
+        "correct": "¡Correcto! +10 puntos",
+        "progress": "Progreso de hoy"
+      }
+    },
+    "stats": {
+      "questions": "Preguntas",
+      "students": "Opositores activos",
+      "topics": "Temarios actualizados"
+    },
+    "features": {
+      "title": "Todo lo que necesitas para aprobar",
+      "subtitle": "Una plataforma pensada para que estudies mejor, midas tu progreso y no lo hagas en solitario.",
+      "questions": {
+        "title": "Más de 2.000 preguntas",
+        "text": "Un banco enorme de test para practicar cada tema tantas veces como necesites."
+      },
+      "mocks": {
+        "title": "Simulacros reales",
+        "text": "Exámenes cronometrados con el formato oficial para llegar preparado al día clave."
+      },
+      "stats": {
+        "title": "Estadísticas personales",
+        "text": "Detecta tus puntos débiles con métricas claras de aciertos, fallos y evolución."
+      },
+      "progress": {
+        "title": "Guarda tu progreso",
+        "text": "Retoma justo donde lo dejaste. Tu avance se sincroniza automáticamente."
+      },
+      "devices": {
+        "title": "Desde móvil y ordenador",
+        "text": "Estudia en casa o aprovecha cualquier hueco desde el móvil. Siempre a mano."
+      }
+    },
+    "community": {
+      "title": "No estudias solo",
+      "subtitle": "Únete a la comunidad de opositores más activa: comparte dudas, resuelve preguntas y motívate con quienes persiguen tu misma plaza.",
+      "cta": "Únete a la comunidad"
+    },
+    "final": {
+      "title": "Tu plaza te está esperando",
+      "subtitle": "Empieza hoy gratis y da el primer paso hacia tu aprobado.",
+      "cta": "Empieza ya gratis!"
+    },
+    "footer": {
+      "tagline": "Prepara tus oposiciones estudiando a diario, gratis.",
+      "rights": "Todos los derechos reservados."
+    }
+  },
+  "auth": {
+    "welcome": "Bienvenido",
+    "login": "Login",
+    "register": "Register"
+  }
 }

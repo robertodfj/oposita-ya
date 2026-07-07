@@ -4,14 +4,23 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
 
+  runtimeConfig: {
+    // Solo servidor (mapea NUXT_API_SECRET)
+    apiSecret: '',
+    public: {
+      // Expuesto al cliente (mapea NUXT_PUBLIC_*)
+      siteUrl: '',
+      apiBase: ''
+    }
+  },
+
   modules: [
     '@nuxtjs/i18n'
   ],
 
   i18n: {
     locales: [
-      { code: 'es', name: 'Español', file: 'es.json' },
-      { code: 'en', name: 'English', file: 'en.json' }
+      { code: 'es', name: 'Español', file: 'es.json' }
     ],
     langDir: 'locales/',
     defaultLocale: 'es',

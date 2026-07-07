@@ -1,0 +1,25 @@
+# Nuxt / Nitro
+.nuxt
+.output
+.data
+dist
+
+# Dependencias
+node_modules
+
+# Variables de entorno (mantener .env.template versionado)
+.env
+.env.*
+!.env.template
+
+# Logs
+*.log
+logs
+
+# Sistema operativo
+.DS_Store
+
+# Editores
+.vscode/*
+!.vscode/extensions.json
+.idea
