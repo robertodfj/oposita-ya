@@ -98,9 +98,60 @@
       "rateLimit": "Demasiados intentos. Espera un momento e inténtalo de nuevo."
     }
   },
+  "cookies": {
+    "title": "Usamos cookies 🍪",
+    "text": "Utilizamos cookies propias y de terceros para analizar el uso de la web y mostrar publicidad. Puedes aceptar todas, rechazarlas o configurarlas.",
+    "policy": "Política de cookies",
+    "accept": "Aceptar todas",
+    "reject": "Rechazar",
+    "configure": "Configurar",
+    "save": "Guardar preferencias",
+    "necessary": "Necesarias",
+    "necessaryHint": "Imprescindibles para que la web funcione. Siempre activas.",
+    "analytics": "Analíticas",
+    "analyticsHint": "Nos ayudan a entender cómo se usa la web para mejorarla.",
+    "marketing": "Publicidad",
+    "marketingHint": "Permiten mostrar anuncios personalizados y financiar el proyecto.",
+    "always": "Siempre"
+  },
   "dashboard": {
     "title": "Progreso actual",
-    "greeting": "Hola, {email}",
-    "logout": "Cerrar sesión"
+    "greeting": "Hola, {name}",
+    "logout": "Cerrar sesión",
+    "streak": "{days} días de racha",
+    "exam": "Faltan {days} días para tu examen",
+    "seeMore": "Ver más",
+    "seeLess": "Ver menos",
+    "sections": {
+      "progress": "Tu progreso",
+      "tests": "Tus tests",
+      "community": "Comunidad"
+    },
+    "cards": {
+      "general": "Progreso general",
+      "generalHint": "del temario completado",
+      "average": "Nota media",
+      "averageHint": "sobre 10 en tus últimos test",
+      "goal": "Objetivo de hoy",
+      "goalHint": "preguntas de {total}",
+      "streakTitle": "Racha de estudio",
+      "streakHint": "¡No la pierdas hoy!",
+      "weakTopics": "Puntos débiles",
+      "gradeHistory": "Últimas notas",
+      "byBlock": "Progreso por bloques"
+    },
+    "tests": {
+      "questions": "{n} preguntas",
+      "start": "Empezar",
+      "continue": "Continuar",
+      "review": "Repasar",
+      "recommended": "Recomendado para ti"
+    },
+    "community": {
+      "subtitle": "Comparte dudas y avances con otros opositores",
+      "new": "Nuevo post",
+      "comments": "{n} comentarios",
+      "hot": "Tendencia"
+    }
   }
 }
