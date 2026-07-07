@@ -1,0 +1,164 @@
+/* =========================================================
+   Oposita Ya · Design tokens + clases reutilizables
+   Usa las variables con var(--xxx) en cualquier page/componente.
+   ========================================================= */
+
+:root {
+  /* --- Colores de marca --- */
+  --brand: #059669;
+  --brand-600: #047857;
+  --brand-700: #065f46;
+  --brand-soft: #ecfdf5;
+
+  --accent: #f59e0b;
+  --accent-600: #d97706;
+  --accent-soft: #fef3c7;
+
+  /* --- Neutros / texto / superficies --- */
+  --ink: #0b1f19;
+  --muted: #5b6b64;
+  --line: #e4ede9;
+  --bg: #ffffff;
+  --bg-warm: #f5faf8;
+  --white: #ffffff;
+
+  /* --- Espaciado (escala) --- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.5rem;
+  --space-8: 3rem;
+  --space-10: 4rem;
+
+  /* --- Radios --- */
+  --radius-sm: 12px;
+  --radius: 20px;
+  --radius-lg: 30px;
+  --radius-pill: 999px;
+
+  /* --- Sombras --- */
+  --shadow-sm: 0 4px 14px -6px rgba(6, 95, 70, 0.18);
+  --shadow: 0 22px 50px -24px rgba(6, 95, 70, 0.35);
+
+  /* --- Layout / tipografía --- */
+  --container: 1160px;
+  --font-sans: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* --- Reset base --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html,
+body {
+  margin: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* =========================================================
+   Clases reutilizables
+   ========================================================= */
+
+/* --- Contenedor centrado --- */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding-inline: clamp(var(--space-4), 4vw, var(--space-7));
+}
+
+/* --- Botones --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+}
+.btn--primary {
+  background: var(--brand);
+  color: var(--white);
+}
+.btn--primary:hover { background: var(--brand-600); transform: translateY(-2px); }
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+.btn--ghost:hover { border-color: var(--brand); color: var(--brand); }
+.btn--accent {
+  background: var(--accent);
+  color: #3d2600;
+  box-shadow: 0 12px 26px -10px rgba(245, 158, 11, 0.75);
+}
+.btn--accent:hover { background: var(--accent-600); transform: translateY(-2px); color: var(--white); }
+.btn--light {
+  background: var(--white);
+  color: var(--brand-700);
+}
+.btn--light:hover { transform: translateY(-2px); }
+.btn--lg {
+  padding: var(--space-4) var(--space-6);
+  font-size: 1.05rem;
+}
+.btn--block { width: 100%; }
+
+/* --- Marca / logo --- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+.brand__mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-700) 100%);
+  color: var(--white);
+  font-weight: 800;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+  .btn:hover { transform: none; }
+}

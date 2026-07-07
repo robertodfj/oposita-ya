@@ -169,81 +169,6 @@ const year = new Date().getFullYear()
 </script>
 
 <style scoped>
-.landing {
-  --brand: #059669;
-  --brand-600: #047857;
-  --brand-700: #065f46;
-  --brand-soft: #ecfdf5;
-  --accent: #f59e0b;
-  --accent-600: #d97706;
-  --accent-soft: #fef3c7;
-  --ink: #0b1f19;
-  --muted: #5b6b64;
-  --line: #e4ede9;
-  --bg: #ffffff;
-  --bg-warm: #f5faf8;
-  --radius: 20px;
-  --shadow-sm: 0 4px 14px -6px rgba(6, 95, 70, 0.18);
-  --shadow: 0 22px 50px -24px rgba(6, 95, 70, 0.35);
-  --container: 1160px;
-
-  color: var(--ink);
-  background: var(--bg);
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-.container {
-  width: 100%;
-  max-width: var(--container);
-  margin: 0 auto;
-  padding-inline: clamp(1.15rem, 4vw, 2.5rem);
-}
-
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.72rem 1.4rem;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  text-decoration: none;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-  white-space: nowrap;
-}
-.btn--primary {
-  background: var(--brand);
-  color: #fff;
-}
-.btn--primary:hover { background: var(--brand-600); transform: translateY(-2px); }
-.btn--ghost {
-  background: transparent;
-  color: var(--ink);
-  border-color: var(--line);
-}
-.btn--ghost:hover { border-color: var(--brand); color: var(--brand); }
-.btn--accent {
-  background: var(--accent);
-  color: #3d2600;
-  box-shadow: 0 12px 26px -10px rgba(245, 158, 11, 0.75);
-}
-.btn--accent:hover { background: var(--accent-600); transform: translateY(-2px); color: #fff; }
-.btn--light {
-  background: #fff;
-  color: var(--brand-700);
-}
-.btn--light:hover { transform: translateY(-2px); }
-.btn--lg {
-  padding: 0.95rem 2rem;
-  font-size: 1.05rem;
-}
-
 /* Navbar */
 .nav {
   position: sticky;
@@ -259,25 +184,6 @@ const year = new Date().getFullYear()
   justify-content: space-between;
   gap: 1rem;
   height: 70px;
-}
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  text-decoration: none;
-  color: var(--ink);
-  font-weight: 800;
-  font-size: 1.2rem;
-}
-.brand__mark {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-700) 100%);
-  color: #fff;
-  font-weight: 800;
 }
 .nav__links {
   display: flex;

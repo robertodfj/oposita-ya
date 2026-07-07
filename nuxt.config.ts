@@ -4,6 +4,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
 
+  css: ['~/assets/css/main.css'],
+
   runtimeConfig: {
     // Solo servidor (mapea NUXT_API_SECRET)
     apiSecret: '',
@@ -15,14 +17,27 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    '@nuxtjs/i18n'
+    '@nuxtjs/i18n',
+    '@nuxtjs/supabase'
   ],
 
+  supabase: {
+    // Las claves se leen de SUPABASE_URL y SUPABASE_KEY (.env)
+    redirectOptions: {
+      login: '/auth',
+      callback: '/confirm',
+      // Solo protegemos el dashboard; el resto es público
+      include: ['/dashboard(/*)?'],
+      exclude: []
+    }
+  },
+
   i18n: {
+    // v9: los archivos viven en <srcDir>/i18n/locales/
     locales: [
       { code: 'es', name: 'Español', file: 'es.json' }
     ],
-    langDir: 'locales/',
+    langDir: 'locales',
     defaultLocale: 'es',
     strategy: 'prefix_except_default'
   }

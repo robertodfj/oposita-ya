@@ -70,8 +70,37 @@
     }
   },
   "auth": {
-    "welcome": "Bienvenido",
-    "login": "Login",
-    "register": "Register"
+    "brand": "Oposita Ya",
+    "welcome": "Bienvenido de nuevo",
+    "subtitle": "Accede a tu cuenta o crea una nueva para empezar a estudiar.",
+    "login": "Iniciar sesión",
+    "register": "Crear cuenta",
+    "name": "Nombre",
+    "namePlaceholder": "Tu nombre",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tucorreo{'@'}ejemplo.com",
+    "password": "Contraseña",
+    "passwordPlaceholder": "••••••••",
+    "submitLogin": "Entrar",
+    "submitRegister": "Crear mi cuenta",
+    "loading": "Un momento…",
+    "google": "Continuar con Google",
+    "divider": "o",
+    "back": "Volver al inicio",
+    "checkEmail": "Te hemos enviado un correo para confirmar tu cuenta. Revisa tu bandeja de entrada.",
+    "errorGeneric": "Algo ha ido mal. Inténtalo de nuevo.",
+    "errors": {
+      "userExists": "Ya existe una cuenta con este correo. Inicia sesión.",
+      "invalidCredentials": "Correo o contraseña incorrectos.",
+      "emailNotConfirmed": "Debes confirmar tu correo antes de entrar.",
+      "weakPassword": "La contraseña es demasiado débil (mínimo 6 caracteres).",
+      "invalidEmail": "El correo electrónico no es válido.",
+      "rateLimit": "Demasiados intentos. Espera un momento e inténtalo de nuevo."
+    }
+  },
+  "dashboard": {
+    "title": "Progreso actual",
+    "greeting": "Hola, {email}",
+    "logout": "Cerrar sesión"
   }
 }
