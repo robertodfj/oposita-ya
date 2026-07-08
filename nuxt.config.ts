@@ -26,8 +26,8 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: '/auth',
       callback: '/confirm',
-      // Solo protegemos el dashboard; el resto es público
-      include: ['/dashboard(/*)?'],
+      // Rutas protegidas (requieren sesión)
+      include: ['/dashboard(/*)?', '/comunidad(/*)?'],
       exclude: []
     }
   },

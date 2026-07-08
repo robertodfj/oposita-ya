@@ -98,6 +98,26 @@
       "rateLimit": "Demasiados intentos. Espera un momento e inténtalo de nuevo."
     }
   },
+  "comunidad": {
+    "title": "Comunidad",
+    "subtitle": "Comparte dudas y avances con otros opositores",
+    "new": "Nuevo post",
+    "titlePh": "Título de tu post",
+    "bodyPh": "Escribe tu duda, tu avance o lo que quieras compartir…",
+    "publish": "Publicar",
+    "cancel": "Cancelar",
+    "empty": "Aún no hay publicaciones. ¡Sé el primero en escribir!",
+    "comments": "{n} comentarios",
+    "commentsShort": "{n} resp.",
+    "back": "Volver a la comunidad",
+    "commentPh": "Escribe una respuesta…",
+    "send": "Responder",
+    "noComments": "Sé el primero en responder.",
+    "anon": "Opositor",
+    "seeAll": "Ver toda la comunidad",
+    "loginToPost": "Publicando como",
+    "loading": "Cargando…"
+  },
   "cookies": {
     "title": "Usamos cookies 🍪",
     "text": "Utilizamos cookies propias y de terceros para analizar el uso de la web y mostrar publicidad. Puedes aceptar todas, rechazarlas o configurarlas.",

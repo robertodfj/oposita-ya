@@ -150,35 +150,45 @@
             <h2 class="section__title">{{ $t('dashboard.sections.community') }}</h2>
             <p class="section__sub">{{ $t('dashboard.community.subtitle') }}</p>
           </div>
-          <button type="button" class="btn btn--accent">＋ {{ $t('dashboard.community.new') }}</button>
+          <NuxtLink :to="localePath('/comunidad')" class="btn btn--accent">＋ {{ $t('dashboard.community.new') }}</NuxtLink>
         </div>
 
-        <ul class="feed">
-          <template v-for="(p, idx) in posts" :key="p.id">
+        <p v-if="!recentPosts.length" class="community-empty">{{ $t('comunidad.empty') }}</p>
+
+        <ul v-else class="feed">
+          <template v-for="(p, idx) in recentPosts" :key="p.id">
             <li class="post">
               <div class="post__votes">
-                <button type="button" class="vote" aria-label="Votar">▲</button>
-                <strong>{{ p.votes }}</strong>
+                <button
+                  type="button"
+                  class="vote"
+                  :class="{ 'vote--on': p.voted }"
+                  :aria-pressed="p.voted"
+                  aria-label="Votar"
+                  @click="toggleVote(p)"
+                >▲</button>
+                <strong>{{ p.votos }}</strong>
               </div>
-              <div class="post__body">
+              <NuxtLink :to="localePath(`/comunidad/${p.id}`)" class="post__body">
                 <div class="post__meta">
-                  <span class="post__opo">{{ p.opo }}</span>
-                  <span class="post__author">· {{ p.author }}</span>
-                  <span v-if="p.hot" class="tag tag--hot">🔥 {{ $t('dashboard.community.hot') }}</span>
+                  <span class="post__author">{{ p.author }}</span>
                 </div>
-                <h3 class="post__title">{{ p.title }}</h3>
-                <p class="post__snippet">{{ p.snippet }}</p>
+                <h3 class="post__title">{{ p.titulo }}</h3>
+                <p v-if="p.cuerpo" class="post__snippet">{{ p.cuerpo }}</p>
                 <div class="post__foot">
-                  <span>💬 {{ $t('dashboard.community.comments', { n: p.comments }) }}</span>
+                  <span>💬 {{ $t('dashboard.community.comments', { n: p.comentarios }) }}</span>
                 </div>
-              </div>
+              </NuxtLink>
             </li>
-            <!-- Anuncio nativo intercalado en el feed -->
             <li v-if="idx === 1" class="feed__ad">
               <AdSlot format="infeed" />
             </li>
           </template>
         </ul>
+
+        <div class="community-more">
+          <NuxtLink :to="localePath('/comunidad')" class="btn btn--ghost">{{ $t('comunidad.seeAll') }}</NuxtLink>
+        </div>
       </section>
     </div>
   </main>
@@ -227,11 +237,47 @@ const tests = [
   { id: 4, topic: 'Unión Europea', title: 'Instituciones de la UE', questions: 20, progress: 70, recommended: false }
 ]
 
-const posts = [
-  { id: 1, votes: 128, opo: 'Administrativo del Estado', author: 'laura_88', title: '¿Cómo memorizáis los plazos de la 39/2015?', snippet: 'Llevo un mes y se me mezclan los plazos de recursos. ¿Algún truco que os funcione?', comments: 34, hot: true },
-  { id: 2, votes: 76, opo: 'Auxiliar Administrativo', author: 'carlosG', title: 'Mi rutina de estudio de 3h al día', snippet: 'Comparto cómo organizo las sesiones para no quemarme. Bloques de 50/10...', comments: 21, hot: false },
-  { id: 3, votes: 52, opo: 'Gestión Procesal', author: 'martaruiz', title: '¡Aprobada la primera! Gracias a la comunidad 🎉', snippet: 'Después de dos convocatorias por fin saqué plaza. Os cuento qué cambié...', comments: 47, hot: true }
-]
+// Comunidad: posts reales recientes (top 3)
+function authorName(prof: any) {
+  return prof?.full_name || prof?.username || 'Opositor'
+}
+async function fetchRecentPosts() {
+  const { data: rows } = await supabase
+    .from('posts')
+    .select('id,titulo,cuerpo,created_at,user_id,comentarios(count),votos(count)')
+    .order('created_at', { ascending: false })
+    .limit(3)
+  const list = rows || []
+  const ids = [...new Set(list.map((p: any) => p.user_id))]
+  const { data: profs } = ids.length
+    ? await supabase.from('profiles').select('id,full_name,username').in('id', ids)
+    : { data: [] as any[] }
+  const map = Object.fromEntries((profs || []).map((p: any) => [p.id, p]))
+
+  const { data: mine } = user.value
+    ? await supabase.from('votos').select('post_id').eq('user_id', user.value.id)
+    : { data: [] as any[] }
+  const voted = new Set((mine || []).map((v: any) => v.post_id))
+
+  return list.map((p: any) => ({
+    ...p,
+    author: authorName(map[p.user_id]),
+    comentarios: p.comentarios?.[0]?.count ?? 0,
+    votos: p.votos?.[0]?.count ?? 0,
+    voted: voted.has(p.id)
+  }))
+}
+const { data: recentPosts, refresh: refreshPosts } = await useAsyncData('dash-recent-posts', fetchRecentPosts, { default: () => [] as any[] })
+
+async function toggleVote(p: any) {
+  if (!user.value) return
+  if (p.voted) {
+    await supabase.from('votos').delete().eq('post_id', p.id).eq('user_id', user.value.id)
+  } else {
+    await supabase.from('votos').upsert({ post_id: p.id, user_id: user.value.id, valor: 1 })
+  }
+  await refreshPosts()
+}
 
 /* ---------------- Expandibles ---------------- */
 const open = ref<Record<string, boolean>>({})
@@ -488,6 +534,8 @@ const sparkPoints = computed(() => sparkCoords.value.map(p => `${p.x},${p.y}`).j
 }
 .post__votes strong { font-size: 0.95rem; font-weight: 800; }
 .vote {
+  display: grid;
+  place-items: center;
   border: none;
   background: var(--bg-warm);
   color: var(--muted);
@@ -495,15 +543,21 @@ const sparkPoints = computed(() => sparkCoords.value.map(p => `${p.x},${p.y}`).j
   height: 34px;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  line-height: 1;
   transition: background 0.15s ease, color 0.15s ease;
 }
 .vote:hover { background: var(--brand-soft); color: var(--brand); }
+.vote--on { background: var(--brand); color: #fff; }
 .post__meta { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; font-size: 0.82rem; color: var(--muted); margin-bottom: var(--space-1); }
 .post__opo { font-weight: 700; color: var(--brand-700); }
 .post__title { margin: 0 0 var(--space-1); font-size: 1.05rem; font-weight: 700; }
 .post__snippet { margin: 0 0 var(--space-3); color: var(--muted); font-size: 0.92rem; }
 .post__foot { font-size: 0.82rem; color: var(--muted); font-weight: 600; }
+
+.post__body { flex: 1; text-decoration: none; color: inherit; display: block; }
+.community-empty { color: var(--muted); background: var(--white); border: 1px dashed var(--line); border-radius: var(--radius); padding: var(--space-6); text-align: center; }
+.community-more { margin-top: var(--space-4); text-align: center; }
 
 /* Anuncios */
 .dash__ad { margin-bottom: var(--space-8); }
