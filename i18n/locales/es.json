@@ -98,6 +98,32 @@
       "rateLimit": "Demasiados intentos. Espera un momento e inténtalo de nuevo."
     }
   },
+  "test": {
+    "listTitle": "Tus tests",
+    "listSubtitle": "Practica por temas o hazte un simulacro completo.",
+    "loading": "Cargando…",
+    "empty": "Este test aún no tiene preguntas disponibles.",
+    "noTests": "Aún no hay tests. Ejecuta el contenido en Supabase.",
+    "questions": "{n} preguntas",
+    "start": "Empezar test",
+    "question": "Pregunta {n} de {total}",
+    "answered": "{n} de {total} respondidas",
+    "submit": "Corregir test",
+    "simulacro": "Simulacro",
+    "results": "Resultados",
+    "yourScore": "Tu nota",
+    "correct": "Aciertos",
+    "wrong": "Fallos",
+    "unanswered": "Sin responder",
+    "yourAnswer": "Tu respuesta",
+    "correctAnswer": "Respuesta correcta",
+    "explanation": "Explicación",
+    "retry": "Repetir",
+    "backToTests": "Volver a tests",
+    "backToDash": "Ir al dashboard",
+    "saving": "Guardando…",
+    "confirmLeave": "Tienes preguntas sin responder. ¿Corregir de todas formas?"
+  },
   "comunidad": {
     "title": "Comunidad",
     "subtitle": "Comparte dudas y avances con otros opositores",

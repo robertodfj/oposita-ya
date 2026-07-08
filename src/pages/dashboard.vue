@@ -121,22 +121,26 @@
       <!-- Sección: Tests -->
       <section class="section">
         <h2 class="section__title">{{ $t('dashboard.sections.tests') }}</h2>
-        <div class="cards cards--tests">
-          <article v-for="t in tests" :key="t.id" class="test">
+        <p v-if="!dashTests.length" class="community-empty">{{ $t('test.noTests') }}</p>
+        <div v-else class="cards cards--tests">
+          <NuxtLink
+            v-for="t in dashTests"
+            :key="t.id"
+            :to="localePath(`/test/${t.id}`)"
+            class="test"
+          >
             <div class="test__head">
-              <span class="test__topic">{{ t.topic }}</span>
-              <span v-if="t.recommended" class="tag tag--reco">★ {{ $t('dashboard.tests.recommended') }}</span>
+              <span class="test__topic">{{ t.es_simulacro ? '⏱ ' + $t('test.simulacro') : 'Test' }}</span>
             </div>
-            <h3 class="test__title">{{ t.title }}</h3>
-            <p class="test__meta">{{ $t('dashboard.tests.questions', { n: t.questions }) }}</p>
-            <div class="test__track"><span class="test__fill" :style="{ width: t.progress + '%' }" /></div>
+            <h3 class="test__title">{{ t.titulo }}</h3>
+            <p class="test__meta">{{ $t('test.questions', { n: t.num_preguntas }) }}</p>
             <div class="test__foot">
-              <span class="test__pct">{{ t.progress }}%</span>
-              <button type="button" class="btn btn--primary test__btn">
-                {{ t.progress === 0 ? $t('dashboard.tests.start') : (t.progress === 100 ? $t('dashboard.tests.review') : $t('dashboard.tests.continue')) }}
-              </button>
+              <span class="test__go">{{ $t('test.start') }} →</span>
             </div>
-          </article>
+          </NuxtLink>
+        </div>
+        <div class="community-more">
+          <NuxtLink :to="localePath('/tests')" class="btn btn--ghost">Ver todos los tests</NuxtLink>
         </div>
       </section>
 
@@ -212,30 +216,105 @@ async function logout() {
   await navigateTo(localePath('/auth'))
 }
 
-/* ---------------- Datos mockeados ---------------- */
-const general = 68
-const average = 7.4
-const streakDays = 12
-const examDays = 87
-const goalDone = 20
+/* ---------------- Progreso real ---------------- */
+const examDays = 87 // TODO: fecha de examen real por oposición
 const goalTotal = 30
 
-const blocks = [
-  { name: 'Bloque I · Constitución', pct: 82 },
-  { name: 'Bloque II · Ley 39/2015', pct: 64 },
-  { name: 'Bloque III · Ley 40/2015', pct: 51 },
-  { name: 'Bloque IV · UE', pct: 38 }
-]
-const weakTopics = ['Recursos administrativos', 'Cómputo de plazos', 'Órganos de la UE']
-const grades = [6.2, 6.8, 6.5, 7.1, 7.9, 7.4]
-const week = [1, 0.7, 1, 0.4, 1, 0.9, 0.3]
+async function fetchStats() {
+  if (!user.value) return { intentos: [] as any[], resp: [] as any[] }
+  const { data: intentos } = await supabase
+    .from('intentos')
+    .select('aciertos,fallos,total,started_at')
+    .eq('user_id', user.value.id)
+    .order('started_at', { ascending: true })
+  const { data: resp } = await supabase
+    .from('respuestas')
+    .select('es_correcta,preguntas(temas(titulo,bloques(nombre)))')
+  return { intentos: intentos || [], resp: resp || [] }
+}
+const { data: stats } = await useAsyncData('dash-stats', fetchStats, { default: () => ({ intentos: [], resp: [] }) })
 
-const tests = [
-  { id: 1, topic: 'Ley 39/2015', title: 'Procedimiento administrativo común', questions: 40, progress: 45, recommended: true },
-  { id: 2, topic: 'Constitución', title: 'Título I · Derechos y deberes', questions: 30, progress: 100, recommended: false },
-  { id: 3, topic: 'Ley 40/2015', title: 'Régimen jurídico del sector público', questions: 25, progress: 0, recommended: false },
-  { id: 4, topic: 'Unión Europea', title: 'Instituciones de la UE', questions: 20, progress: 70, recommended: false }
-]
+const intentos = computed<any[]>(() => stats.value?.intentos || [])
+const resp = computed<any[]>(() => stats.value?.resp || [])
+
+const totalPreg = computed(() => intentos.value.reduce((s, i) => s + (i.total || 0), 0))
+const totalAciertos = computed(() => intentos.value.reduce((s, i) => s + (i.aciertos || 0), 0))
+const general = computed(() => totalPreg.value ? Math.round((totalAciertos.value / totalPreg.value) * 100) : 0)
+const average = computed(() => {
+  const w = intentos.value.filter((i) => i.total > 0)
+  return w.length ? w.reduce((s, i) => s + (i.aciertos / i.total) * 10, 0) / w.length : 0
+})
+const grades = computed<number[]>(() =>
+  intentos.value.filter((i) => i.total > 0).slice(-6).map((i) => +((i.aciertos / i.total) * 10).toFixed(1))
+)
+
+const goalDone = computed(() => {
+  const today = new Date().toDateString()
+  return intentos.value
+    .filter((i) => new Date(i.started_at).toDateString() === today)
+    .reduce((s, i) => s + (i.total || 0), 0)
+})
+
+const streakDays = computed(() => {
+  const days = new Set(intentos.value.map((i) => new Date(i.started_at).toDateString()))
+  const d = new Date()
+  if (!days.has(d.toDateString())) d.setDate(d.getDate() - 1)
+  let s = 0
+  while (days.has(d.toDateString())) { s++; d.setDate(d.getDate() - 1) }
+  return s
+})
+
+function aggByKey(keyFn: (r: any) => string | undefined) {
+  const map: Record<string, { ok: number, total: number }> = {}
+  for (const r of resp.value) {
+    const k = keyFn(r)
+    if (!k) continue
+    map[k] = map[k] || { ok: 0, total: 0 }
+    map[k].total++
+    if (r.es_correcta) map[k].ok++
+  }
+  return map
+}
+
+const blocks = computed(() => {
+  const m = aggByKey((r) => r.preguntas?.temas?.bloques?.nombre)
+  return Object.entries(m)
+    .map(([name, v]) => ({ name, pct: v.total ? Math.round((v.ok / v.total) * 100) : 0 }))
+    .sort((a, b) => b.pct - a.pct)
+})
+
+const weakTopics = computed(() => {
+  const m = aggByKey((r) => r.preguntas?.temas?.titulo)
+  return Object.entries(m)
+    .map(([titulo, v]) => ({ titulo, acc: v.ok / v.total }))
+    .sort((a, b) => a.acc - b.acc)
+    .slice(0, 3)
+    .map((x) => x.titulo)
+})
+
+const week = computed(() => {
+  const out: number[] = []
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i)
+    const key = d.toDateString()
+    const cnt = intentos.value
+      .filter((x) => new Date(x.started_at).toDateString() === key)
+      .reduce((s, x) => s + (x.total || 0), 0)
+    out.push(cnt > 0 ? Math.min(1, 0.3 + cnt / 30) : 0.12)
+  }
+  return out
+})
+
+// Tests reales (top 4)
+async function fetchDashTests() {
+  const { data } = await supabase
+    .from('tests')
+    .select('id,titulo,num_preguntas,es_simulacro,created_at')
+    .order('created_at', { ascending: true })
+    .limit(4)
+  return data || []
+}
+const { data: dashTests } = await useAsyncData('dash-tests', fetchDashTests, { default: () => [] as any[] })
 
 // Comunidad: posts reales recientes (top 3)
 function authorName(prof: any) {
@@ -286,10 +365,12 @@ const isOpen = (k: string) => !!open.value[k]
 
 /* Sparkline de notas */
 const sparkCoords = computed(() => {
+  const g = grades.value
   const max = 10, min = 0
-  return grades.map((g, i) => ({
-    x: (i / (grades.length - 1)) * 240,
-    y: 70 - ((g - min) / (max - min)) * 70
+  const denom = g.length > 1 ? g.length - 1 : 1
+  return g.map((val, i) => ({
+    x: (i / denom) * 240,
+    y: 70 - ((val - min) / (max - min)) * 70
   }))
 })
 const sparkPoints = computed(() => sparkCoords.value.map(p => `${p.x},${p.y}`).join(' '))
@@ -501,9 +582,12 @@ const sparkPoints = computed(() => sparkCoords.value.map(p => `${p.x},${p.y}`).j
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
+  text-decoration: none;
+  color: inherit;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 .test:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.test__go { font-weight: 700; color: var(--brand-700); font-size: 0.9rem; margin-top: auto; }
 .test__head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: var(--space-2); }
 .test__topic { font-size: 0.78rem; font-weight: 700; color: var(--brand-700); background: var(--brand-soft); padding: 0.2rem 0.55rem; border-radius: var(--radius-pill); }
 .test__title { margin: 0 0 var(--space-1); font-size: 1.05rem; font-weight: 700; }

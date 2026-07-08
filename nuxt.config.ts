@@ -27,7 +27,7 @@ export default defineNuxtConfig({
       login: '/auth',
       callback: '/confirm',
       // Rutas protegidas (requieren sesión)
-      include: ['/dashboard(/*)?', '/comunidad(/*)?'],
+      include: ['/dashboard(/*)?', '/comunidad(/*)?', '/tests(/*)?', '/test(/*)?'],
       exclude: []
     }
   },
